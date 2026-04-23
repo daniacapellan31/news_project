@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Draft Articles</title>
+</head>
+<body>
+    <h1>Draft Articles</h1>
+
+    {% if articles %}
+        <ul>
+            {% for article in articles %}
+                <li>
+                    <strong>{{ article.title }}</strong>
+                    - <a href="{% url 'publish_article' article.id %}">Publish</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No draft articles available.</p>
+    {% endif %}
+
+    <p><a href="{% url 'home' %}">Back to Home</a></p>
+</body>
+</html>

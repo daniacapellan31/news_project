@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ article.title }}</title>
+</head>
+<body>
+    <h1>{{ article.title }}</h1>
+
+    <p><strong>Author:</strong> {{ article.author.username }}</p>
+    <p><strong>Editorial:</strong> {{ article.editorial.name }}</p>
+    <p><strong>Published:</strong> {{ article.is_published }}</p>
+
+    <p>{{ article.content }}</p>
+
+    <p><a href="{% url 'home' %}">Back to Home</a></p>
+</body>
+</html>

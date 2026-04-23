@@ -1,0 +1,31 @@
+News Project Design
+
+Users:
+- Reader
+- Journalist
+- Editor
+
+Main functionality:
+- Readers can view published articles and newsletters.
+- Journalists can create, edit, and delete articles and newsletters.
+- Editors can review drafts, update content, publish articles, and delete articles and newsletters.
+
+System design:
+- Django project with role-based functionality
+- Custom user model using AbstractUser
+- MariaDB database
+- HTML templates for frontend
+- Django admin panel for content management
+- Groups and permissions for access control
+
+Main models:
+- User
+- Editorial
+- Article
+- Newsletter
+
+Relationships:
+- An Editorial can have multiple editors and journalists.
+- An Article belongs to an Editorial and has an author.
+- A Newsletter has an author and can include multiple articles.
+- Readers can subscribe to publishers and journalists.
