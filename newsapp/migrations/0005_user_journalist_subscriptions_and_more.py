@@ -8,28 +8,45 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('newsapp', '0004_alter_article_author'),
+        ("newsapp", "0004_alter_article_author"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='journalist_subscriptions',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'role': 'journalist'}, related_name='subscribers', to=settings.AUTH_USER_MODEL),
+            model_name="user",
+            name="journalist_subscriptions",
+            field=models.ManyToManyField(
+                blank=True,
+                limit_choices_to={"role": "journalist"},
+                related_name="subscribers",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='publisher_subscriptions',
-            field=models.ManyToManyField(blank=True, related_name='subscribed_readers', to='newsapp.editorial'),
+            model_name="user",
+            name="publisher_subscriptions",
+            field=models.ManyToManyField(
+                blank=True, related_name="subscribed_readers", to="newsapp.editorial"
+            ),
         ),
         migrations.AlterField(
-            model_name='article',
-            name='author',
-            field=models.ForeignKey(limit_choices_to={'role': 'journalist'}, on_delete=django.db.models.deletion.CASCADE, related_name='articles_written', to=settings.AUTH_USER_MODEL),
+            model_name="article",
+            name="author",
+            field=models.ForeignKey(
+                limit_choices_to={"role": "journalist"},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="articles_written",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='newsletter',
-            name='author',
-            field=models.ForeignKey(limit_choices_to={'role': 'journalist'}, on_delete=django.db.models.deletion.CASCADE, related_name='newsletters_created', to=settings.AUTH_USER_MODEL),
+            model_name="newsletter",
+            name="author",
+            field=models.ForeignKey(
+                limit_choices_to={"role": "journalist"},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="newsletters_created",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

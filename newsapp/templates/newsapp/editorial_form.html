@@ -1,0 +1,9 @@
+<h2>Create Editorial</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Editorial</button>
+</form>
+
+<p><a href="{% url 'home' %}">Back to Home</a></p>

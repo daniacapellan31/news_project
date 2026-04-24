@@ -4,22 +4,38 @@
     <title>News Project</title>
 </head>
 <body>
+
     <h1>News Project</h1>
 
     {% if user.is_authenticated %}
         <p>Welcome, {{ user.username }} ({{ user.role }})</p>
-        <a href="{% url 'logout' %}">Logout</a>
 
+        <!-- Logout (POST method - required) -->
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+
+        <!-- Journalist options -->
         {% if user.role == 'journalist' %}
             <p><a href="{% url 'article_create' %}">Create Article</a></p>
             <p><a href="{% url 'newsletter_create' %}">Create Newsletter</a></p>
         {% endif %}
+
+        <!-- Editor options -->
+        {% if user.role == 'editor' %}
+            <p><a href="{% url 'editorial_create' %}">Create Editorial</a></p>
+        {% endif %}
+
     {% else %}
         <a href="{% url 'login' %}">Login</a>
         <a href="{% url 'register' %}">Register</a>
     {% endif %}
 
+    <hr>
+
     <h2>Articles</h2>
+
     {% for article in articles %}
         <div style="border:1px solid black; margin:10px; padding:10px;">
             <h3>{{ article.title }}</h3>
@@ -27,11 +43,13 @@
             <p>Author: {{ article.author.username }}</p>
             <p>Published: {{ article.is_published }}</p>
 
+            <!-- Journalist controls -->
             {% if user.role == 'journalist' and article.author == user %}
                 <a href="{% url 'article_update' article.pk %}">Edit</a>
                 <a href="{% url 'article_delete' article.pk %}">Delete</a>
             {% endif %}
 
+            <!-- Editor approval -->
             {% if user.role == 'editor' and not article.is_published %}
                 <form method="post" action="{% url 'approve_article' article.pk %}">
                     {% csrf_token %}
@@ -43,7 +61,10 @@
         <p>No articles available.</p>
     {% endfor %}
 
+    <hr>
+
     <h2>Newsletters</h2>
+
     {% for newsletter in newsletters %}
         <div style="border:1px solid gray; margin:10px; padding:10px;">
             <h3>{{ newsletter.title }}</h3>
@@ -58,5 +79,6 @@
     {% empty %}
         <p>No newsletters available.</p>
     {% endfor %}
+
 </body>
 </html>

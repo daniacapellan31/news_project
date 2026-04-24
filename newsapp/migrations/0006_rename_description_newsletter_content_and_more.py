@@ -8,68 +8,102 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('newsapp', '0005_user_journalist_subscriptions_and_more'),
+        ("newsapp", "0005_user_journalist_subscriptions_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='newsletter',
-            old_name='description',
-            new_name='content',
+            model_name="newsletter",
+            old_name="description",
+            new_name="content",
         ),
         migrations.RemoveField(
-            model_name='editorial',
-            name='editors',
+            model_name="editorial",
+            name="editors",
         ),
         migrations.RemoveField(
-            model_name='editorial',
-            name='journalists',
+            model_name="editorial",
+            name="journalists",
         ),
         migrations.RemoveField(
-            model_name='newsletter',
-            name='articles',
+            model_name="newsletter",
+            name="articles",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='journalist_subscriptions',
+            model_name="user",
+            name="journalist_subscriptions",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='publisher_subscriptions',
+            model_name="user",
+            name="publisher_subscriptions",
         ),
         migrations.AddField(
-            model_name='article',
-            name='approved_at',
+            model_name="article",
+            name="approved_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='subscribed_journalists',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'role': 'journalist'}, related_name='journalist_subscribers', to=settings.AUTH_USER_MODEL),
+            model_name="user",
+            name="subscribed_journalists",
+            field=models.ManyToManyField(
+                blank=True,
+                limit_choices_to={"role": "journalist"},
+                related_name="journalist_subscribers",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='subscribed_publishers',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'role': 'journalist'}, related_name='publisher_subscribers', to=settings.AUTH_USER_MODEL),
+            model_name="user",
+            name="subscribed_publishers",
+            field=models.ManyToManyField(
+                blank=True,
+                limit_choices_to={"role": "journalist"},
+                related_name="publisher_subscribers",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='article',
-            name='author',
-            field=models.ForeignKey(limit_choices_to={'role': 'journalist'}, on_delete=django.db.models.deletion.CASCADE, related_name='articles', to=settings.AUTH_USER_MODEL),
+            model_name="article",
+            name="author",
+            field=models.ForeignKey(
+                limit_choices_to={"role": "journalist"},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="articles",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='article',
-            name='editor',
-            field=models.ForeignKey(blank=True, limit_choices_to={'role': 'editor'}, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviewed_articles', to=settings.AUTH_USER_MODEL),
+            model_name="article",
+            name="editor",
+            field=models.ForeignKey(
+                blank=True,
+                limit_choices_to={"role": "editor"},
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="reviewed_articles",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='newsletter',
-            name='author',
-            field=models.ForeignKey(limit_choices_to={'role': 'journalist'}, on_delete=django.db.models.deletion.CASCADE, related_name='newsletters', to=settings.AUTH_USER_MODEL),
+            model_name="newsletter",
+            name="author",
+            field=models.ForeignKey(
+                limit_choices_to={"role": "journalist"},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="newsletters",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='role',
-            field=models.CharField(choices=[('reader', 'Reader'), ('journalist', 'Journalist'), ('editor', 'Editor')], max_length=20),
+            model_name="user",
+            name="role",
+            field=models.CharField(
+                choices=[
+                    ("reader", "Reader"),
+                    ("journalist", "Journalist"),
+                    ("editor", "Editor"),
+                ],
+                max_length=20,
+            ),
         ),
     ]

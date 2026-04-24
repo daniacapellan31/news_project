@@ -1,0 +1,62 @@
+USE CASE DIAGRAM - NEWS PROJECT
+
+Actors:
+- Reader
+- Journalist
+- Editor
+- API User
+
+Use Cases:
+
+Reader:
+- Register account
+- Log in
+- View published articles
+- Subscribe to journalists
+- Receive article notifications
+
+Journalist:
+- Register account
+- Log in
+- Create article
+- Edit own article
+- Delete own article
+- Create newsletter
+
+Editor:
+- Log in
+- Create editorial
+- Review articles
+- Approve articles
+- Publish articles
+
+API User:
+- Authenticate with token
+- View articles through API
+- Create articles through API
+- View subscribed articles through API
+
+Diagram description:
+
+Reader ---> Register account
+Reader ---> Log in
+Reader ---> View published articles
+Reader ---> Subscribe to journalists
+Reader ---> Receive article notifications
+
+Journalist ---> Log in
+Journalist ---> Create article
+Journalist ---> Edit own article
+Journalist ---> Delete own article
+Journalist ---> Create newsletter
+
+Editor ---> Log in
+Editor ---> Create editorial
+Editor ---> Review articles
+Editor ---> Approve articles
+Editor ---> Publish articles
+
+API User ---> Authenticate with token
+API User ---> View articles through API
+API User ---> Create articles through API
+API User ---> View subscribed articles through API

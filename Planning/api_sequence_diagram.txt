@@ -1,0 +1,71 @@
+API SEQUENCE DIAGRAM - NEWS PROJECT
+
+Scenario:
+Authenticated user creates or retrieves articles through the API.
+
+Participants:
+- API User
+- Django REST Framework
+- Authentication System
+- Article API View
+- Database
+
+Sequence:
+
+1. API User sends a request to an API endpoint.
+   Example:
+   GET /api/articles/
+
+2. Django REST Framework receives the request.
+
+3. Django REST Framework checks authentication.
+
+4. Authentication System validates the user using:
+   - SessionAuthentication
+   - BasicAuthentication
+   - TokenAuthentication
+
+5. If authentication fails:
+   - The API returns an unauthorized response.
+
+6. If authentication succeeds:
+   - The request continues to the Article API View.
+
+7. Article API View checks the request method.
+
+8. If the request is GET:
+   - The view retrieves articles from the database.
+   - The API returns the article data.
+
+9. If the request is POST:
+   - The view validates the submitted article data.
+   - The view saves the article in the database.
+   - The API returns the created article data.
+
+Text diagram:
+
+API User
+   |
+   | Sends API request
+   v
+Django REST Framework
+   |
+   | Checks authentication
+   v
+Authentication System
+   |
+   | Valid user?
+   v
+Article API View
+   |
+   | Reads or writes article data
+   v
+Database
+   |
+   | Returns result
+   v
+Article API View
+   |
+   | Sends API response
+   v
+API User
