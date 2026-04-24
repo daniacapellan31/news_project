@@ -66,6 +66,11 @@ class Newsletter(models.Model):
         related_name="newsletters",
         limit_choices_to={"role": "journalist"},
     )
+    articles = models.ManyToManyField(
+        "Article",
+        blank=True,
+        related_name="newsletters",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

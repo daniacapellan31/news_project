@@ -1,12 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from .models import Article, Newsletter, Editorial
 from rest_framework.authtoken.models import Token
+
+from .models import Article, Newsletter, Editorial
 
 
 class NewsAppTests(TestCase):
-
     def setUp(self):
         """
         Create test users, editorial, article, and newsletter.
@@ -14,7 +14,6 @@ class NewsAppTests(TestCase):
         """
         User = get_user_model()
 
-        # Create users with different roles
         self.reader = User.objects.create_user(
             username="reader1", password="testpass123", role="reader"
         )
@@ -27,10 +26,8 @@ class NewsAppTests(TestCase):
             username="editor1", password="testpass123", role="editor"
         )
 
-        # Create editorial
         self.editorial = Editorial.objects.create(name="Tech News")
 
-        # Create article (initially not published)
         self.article = Article.objects.create(
             title="Test Article",
             content="Test content",
@@ -39,12 +36,14 @@ class NewsAppTests(TestCase):
             is_published=False,
         )
 
-        # Create newsletter
         self.newsletter = Newsletter.objects.create(
             title="Test Newsletter",
             content="Newsletter content",
             author=self.journalist,
         )
+
+        # Many-to-many relationship between Newsletter and Article
+        self.newsletter.articles.add(self.article)
 
     # -----------------------------
     # 1. ROLE ACCESS TESTS
@@ -62,27 +61,15 @@ class NewsAppTests(TestCase):
         response = self.client.get(reverse("article_create"))
         self.assertEqual(response.status_code, 200)
 
-    def test_editor_can_approve_article(self):
-        """Ensure editor can approve an article."""
-        self.client.login(username="editor1", password="testpass123")
-        response = self.client.post(reverse("approve_article", args=[self.article.id]))
-        self.article.refresh_from_db()
-
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(self.article.is_published)
-
     # -----------------------------
     # 2. READER SUBSCRIPTIONS
     # -----------------------------
 
-    def test_reader_sees_only_subscriptions(self):
+    def test_reader_sees_subscribed_journalist_article(self):
         """Ensure reader sees articles from subscribed journalists."""
-
-        # Make article visible
         self.article.is_published = True
         self.article.save()
 
-        # Subscribe reader
         self.reader.subscribed_journalists.add(self.journalist)
 
         self.client.login(username="reader1", password="testpass123")
@@ -92,7 +79,7 @@ class NewsAppTests(TestCase):
         self.assertContains(response, self.article.title)
 
     # -----------------------------
-    # 3. JOURNALIST CREATES ARTICLE
+    # 3. JOURNALIST ACTIONS
     # -----------------------------
 
     def test_journalist_creates_article(self):
@@ -111,57 +98,28 @@ class NewsAppTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Article.objects.filter(title="New Article").exists())
 
-    # -----------------------------
-    # 4. EDITOR ACTIONS
-    # -----------------------------
-
-    def test_editor_approves_article(self):
-        """Ensure editor can approve an article."""
-        self.client.login(username="editor1", password="testpass123")
-
-        response = self.client.post(reverse("approve_article", args=[self.article.id]))
-
-        self.article.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(self.article.is_published)
-
-    def test_editor_deletes_article_api(self):
-        """Ensure editor can delete an article via API using token authentication."""
-
-        # Create token for editor
-        token, _ = Token.objects.get_or_create(user=self.editor)
-
-        # Send DELETE request with token
-        response = self.client.delete(
-            reverse("api_article_detail", args=[self.article.id]),
-            HTTP_AUTHORIZATION=f"Token {token.key}",
-        )
-
-        self.assertIn(response.status_code, [200, 204])
-
-    # -----------------------------
-    # 5. NEWSLETTERS
-    # -----------------------------
-
     def test_journalist_creates_newsletter(self):
         """Ensure journalist can create a newsletter."""
         self.client.login(username="journalist1", password="testpass123")
 
         response = self.client.post(
             reverse("newsletter_create"),
-            {"title": "New Newsletter", "content": "Newsletter body"},
+            {
+                "title": "New Newsletter",
+                "content": "Newsletter body",
+            },
         )
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Newsletter.objects.filter(title="New Newsletter").exists())
 
     # -----------------------------
-    # 6. APPROVAL LOGIC / SIGNALS
+    # 4. EDITOR ACTIONS
     # -----------------------------
 
-    def test_article_approval_logic_works(self):
+    def test_editor_approves_article(self):
         """
-        Ensure approval logic updates:
+        Ensure editor approval updates:
         - is_published
         - editor
         - approved_at
@@ -171,7 +129,32 @@ class NewsAppTests(TestCase):
         response = self.client.post(reverse("approve_article", args=[self.article.id]))
 
         self.article.refresh_from_db()
+
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.article.editor, self.editor)
         self.assertTrue(self.article.is_published)
+        self.assertEqual(self.article.editor, self.editor)
         self.assertIsNotNone(self.article.approved_at)
+
+    # -----------------------------
+    # 5. NEWSLETTER MANY-TO-MANY TEST
+    # -----------------------------
+
+    def test_newsletter_can_contain_articles(self):
+        """Ensure newsletter can be linked to articles."""
+        self.assertIn(self.article, self.newsletter.articles.all())
+
+    # -----------------------------
+    # 6. API TESTS
+    # -----------------------------
+
+    def test_editor_deletes_article_api(self):
+        """Ensure editor can delete an article via API using token authentication."""
+        token, _ = Token.objects.get_or_create(user=self.editor)
+
+        response = self.client.delete(
+            reverse("api_article_detail", args=[self.article.id]),
+            HTTP_AUTHORIZATION=f"Token {token.key}",
+        )
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(Article.objects.filter(id=self.article.id).exists())
