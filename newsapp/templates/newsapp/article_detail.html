@@ -10,6 +10,21 @@
     <p><strong>Editorial:</strong> {{ article.editorial.name }}</p>
     <p><strong>Published:</strong> {{ article.is_published }}</p>
 
+    <!--  SUBSCRIBE BUTTON -->
+    {% if user.is_authenticated and user.role == "reader" %}
+        
+        {% if article.author in user.subscribed_journalists.all %}
+            <a href="{% url 'unsubscribe_from_journalist' article.author.id %}">
+                <button>Unsubscribe</button>
+            </a>
+        {% else %}
+            <a href="{% url 'subscribe_to_journalist' article.author.id %}">
+                <button>Subscribe to {{ article.author.username }}</button>
+            </a>
+        {% endif %}
+        
+    {% endif %}
+
     <p>{{ article.content }}</p>
 
     <p><a href="{% url 'home' %}">Back to Home</a></p>

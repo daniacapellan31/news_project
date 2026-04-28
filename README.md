@@ -1,164 +1,205 @@
-# News Project
+# 📰 News Project
 
-## Project Description
+## 📌 Project Overview
 
-News Project is a Django web application that allows users to interact with news articles and newsletters based on their assigned role.
+News Project is a full-stack Django web application that simulates a real-world news publishing platform with role-based access control and API integration.
 
-The system includes three main user roles:
-
-- Reader  
-- Journalist  
-- Editor  
-
-Each role has different permissions and responsibilities within the application.
+Users can create, manage, approve, and consume news content depending on their assigned role.
 
 ---
 
-## Features
+## 👥 User Roles
 
-### Reader
+The system is built around three core roles:
 
-Readers can:
+- Reader – consumes content  
+- Journalist – creates content  
+- Editor – reviews and approves content  
 
+Each role has strictly controlled permissions to ensure proper workflow and data integrity.
+
+---
+
+## ✨ Core Features
+
+### 👤 Reader
 - Register and log in  
-- View published articles  
+- View only published articles  
 - Subscribe to journalists  
-- Receive notifications when subscribed journalists publish new articles  
+- View articles from subscribed journalists via API  
 
 ---
 
-### Journalist
-
-Journalists can:
-
-- Register and log in  
-- Create articles  
-- Edit their own articles  
-- Delete their own articles  
+### ✍️ Journalist
+- Create articles (initially unpublished)  
+- Edit and delete their own articles  
 - Create newsletters  
-
-Articles created by journalists are not published immediately. They must be approved by an editor first.
-
----
-
-### Editor
-
-Editors can:
-
-- Review articles  
-- Approve articles  
-- Publish approved articles  
-- Create editorials  
+- Manage their own content  
 
 ---
 
-## Editorials
-
-The application includes an Editorial model, which represents a publication (publisher).
-
-Editorials allow journalists and editors to be grouped under a single publication. Articles are connected to an editorial, helping organize content and meeting the project requirements.
+### 🛠️ Editor
+- Review submitted articles  
+- Approve articles via API  
+- Publish content to make it visible to readers  
+- Manage editorials (publications)  
 
 ---
 
-## API
+## 📰 Articles Workflow
 
-The project includes API endpoints built with Django REST Framework.
+1. Journalist creates an article  
+2. Article is saved as Not Published  
+3. Editor approves article via API  
+4. Article becomes Published  
+5. Readers can now view it  
 
-Authentication is configured using:
+✔ This workflow demonstrates real-world editorial approval systems.
 
+---
+
+## 🗞️ Editorials
+
+Editorials act as publishers that group journalists and editors.
+
+- Articles belong to an editorial  
+- Editors manage approval within their editorial  
+- Journalists publish under a structured organization  
+
+---
+
+## 📨 Newsletters
+
+- Created by journalists  
+- Can include multiple articles  
+- Readers can subscribe to newsletters  
+- Provides curated collections of content  
+
+---
+
+## 🔌 API (Django REST Framework)
+
+The project includes a fully functional REST API.
+
+### 🔐 Authentication Methods
 - SessionAuthentication  
 - BasicAuthentication  
 - TokenAuthentication  
 
-To generate a token, use:
+---
+
+### 🔑 Generate Token
 
 bash python manage.py drf_create_token <username> 
 
-Example endpoint:
+or:
 
-POST /api/token/
-
----
-
-## Code Style
-
-This project includes code style tools to maintain clean and professional code.
-
-Included in requirements.txt:
-
-- Black  
-- Flake8  
-
-Black formats the code automatically, while Flake8 checks for PEP8 compliance.
+bash POST /api/token/ 
 
 ---
 
-## Technologies Used
+### 📡 Example Endpoints
+
+| Method | Endpoint | Description |
+|------|--------|-------------|
+| GET | /api/articles/ | List published articles |
+| POST | /api/articles/ | Create article (journalist only) |
+| GET | /api/articles/subscribed/ | Articles from subscriptions |
+| POST | /api/articles/<id>/approve/ | Approve article (editor only) |
+
+---
+
+## 🔒 Permissions Logic
+
+- Only journalists can create articles  
+- Only editors can approve articles  
+- Only published articles are visible to readers  
+- Journalists can only edit their own content  
+
+---
+
+## 🧪 Testing
+
+Run tests with:
+
+bash python3 manage.py test 
+
+Manual testing was also performed to validate:
+- Role permissions  
+- API functionality  
+- UI behavior  
+
+---
+
+## 🧠 Code Quality
+
+This project follows professional coding standards:
+
+- Black → automatic formatting  
+- Flake8 → PEP8 validation  
+
+---
+
+## 🛠️ Technologies Used
 
 - Python  
 - Django  
 - Django REST Framework  
 - MariaDB / MySQL  
-- HTML  
-- Black  
-- Flake8  
+- HTML (Django Templates)  
 
 ---
 
-## Installation
+## ⚙️ Installation Guide
 
-1. Clone the repository:
-
+### 1. Clone repository
 bash git clone <your-repository-url> cd news_project 
 
-2. Create and activate a virtual environment:
-
+### 2. Create virtual environment
 bash python3 -m venv venv source venv/bin/activate 
 
-3. Install dependencies:
+### 3. Install dependencies
+bash pip install -r requirements.txt 
 
-bash pip3 install -r requirements.txt 
+### 4. Run migrations
+bash python manage.py makemigrations python manage.py migrate 
 
-4. Apply migrations:
+### 5. Run server
+bash python manage.py runserver 
 
-bash python3 manage.py makemigrations python3 manage.py migrate 
-
-5. Run the development server:
-
-bash python3 manage.py runserver 
-
-6. Open your browser and go to:
-
+### 6. Open browser
 http://127.0.0.1:8000/
 
 ---
 
-## Running Tests
-
-To run automated tests:
-
-bash python3 manage.py test 
-
----
-
-## Planning
+## 📊 Project Planning
 
 The project includes a Planning folder with:
 
-- Use case diagram  
-- API sequence diagram  
-- Design notes  
+- Use Case Diagram  
+- API Sequence Diagram  
+- System Design Notes  
 
-These diagrams describe system behavior and API interactions.
+These documents describe system architecture and behavior.
+
+---
+
+## 🎯 Key Achievements
+
+- Full role-based system  
+- Secure API with token authentication  
+- Editorial approval workflow  
+- Integration between UI and API  
+- Clean and maintainable code  
 
 ---
 
-## Notes
+## 📌 Final Notes
 
-- Only journalists can create articles  
-- Only editors can approve articles  
-- Readers can only view published content  
-- Articles are linked to editorials (publishers)  
-- Newsletters can include multiple articles  
+This project demonstrates the implementation of a real-world publishing workflow, combining backend logic, API design, and frontend interaction in a structured and scalable way.
 
 ---
+
+## 👩‍💻 Author
+
+Dania Onyebuagu

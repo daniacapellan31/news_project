@@ -46,6 +46,16 @@ def register_view(request):
     return render(request, "newsapp/register.html", {"form": form})
 
 
+def article_detail(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+
+    return render(
+        request,
+        "newsapp/article_detail.html",
+        {"article": article}
+    )
+
+
 @login_required
 def article_create(request):
     if request.user.role != "journalist":
@@ -54,10 +64,21 @@ def article_create(request):
 
     if request.method == "POST":
         form = ArticleForm(request.POST)
+
+        # Set the author before form validation
+        form.instance.author = request.user
+        form.instance.editor = None
+        form.instance.approved_by = None
+        form.instance.is_published = False
+
         if form.is_valid():
             article = form.save(commit=False)
+
             article.author = request.user
+            article.editor = None
+            article.approved_by = None
             article.is_published = False
+
             article.save()
             messages.success(request, "Article created successfully.")
             return redirect("home")
@@ -175,7 +196,7 @@ def approve_article(request, pk):
 
     if request.method == "POST":
         article.is_published = True
-        article.editor = request.user
+        article.approved_by = request.user
         article.approved_at = timezone.now()
         article.save()
 
@@ -231,3 +252,58 @@ def editorial_create(request):
         form = EditorialForm()
 
     return render(request, "newsapp/editorial_form.html", {"form": form})
+
+
+@login_required
+def subscribe_to_journalist(request, journalist_id):
+    journalist = get_object_or_404(User, id=journalist_id, role="journalist")
+
+    if request.user.role != "reader":
+        messages.error(request, "Only readers can subscribe to journalists.")
+        return redirect("home")
+
+    request.user.subscribed_journalists.add(journalist)
+    messages.success(request, f"You are now subscribed to {journalist.username}.")
+
+    return redirect("home")
+
+
+@login_required
+def unsubscribe_from_journalist(request, journalist_id):
+    journalist = get_object_or_404(User, id=journalist_id, role="journalist")
+
+    if request.user.role != "reader":
+        messages.error(request, "Only readers can unsubscribe from journalists.")
+        return redirect("home")
+
+    request.user.subscribed_journalists.remove(journalist)
+    messages.success(request, f"You have unsubscribed from {journalist.username}.")
+
+    return redirect("home")
+
+@login_required
+def subscribe_to_newsletter(request, newsletter_id):
+    newsletter = get_object_or_404(Newsletter, id=newsletter_id)
+
+    if request.user.role != "reader":
+        messages.error(request, "Only readers can subscribe to newsletters.")
+        return redirect("home")
+
+    newsletter.subscribers.add(request.user)
+    messages.success(request, f"You are now subscribed to {newsletter.title}.")
+
+    return redirect("home")
+
+
+@login_required
+def unsubscribe_from_newsletter(request, newsletter_id):
+    newsletter = get_object_or_404(Newsletter, id=newsletter_id)
+
+    if request.user.role != "reader":
+        messages.error(request, "Only readers can unsubscribe from newsletters.")
+        return redirect("home")
+
+    newsletter.subscribers.remove(request.user)
+    messages.success(request, f"You have unsubscribed from {newsletter.title}.")
+
+    return redirect("home")

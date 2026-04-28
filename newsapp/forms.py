@@ -41,10 +41,10 @@ class ArticleForm(forms.ModelForm):
 class NewsletterForm(forms.ModelForm):
     class Meta:
         model = Newsletter
-        fields = ["title", "content"]
+        fields = ["title", "content", "articles"]
 
 
 class EditorialForm(forms.ModelForm):
     class Meta:
         model = Editorial
-        fields = ["name", "journalists", "editors"]
+        fields = ["name", "journalists", "editors",]

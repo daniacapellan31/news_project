@@ -38,10 +38,20 @@
 
     {% for article in articles %}
         <div style="border:1px solid black; margin:10px; padding:10px;">
-            <h3>{{ article.title }}</h3>
+            <h3>
+                <a href="{% url 'article_detail' article.pk %}">
+                    {{ article.title }}
+                </a>
+            </h3>
+
             <p>{{ article.content }}</p>
             <p>Author: {{ article.author.username }}</p>
-            <p>Published: {{ article.is_published }}</p>
+           
+            {% if article.is_published %}
+                <p style="color: green;">Published</p> 
+            {% else %}
+                <p style="color: red;">Not Published</p>
+            {% endif %}
 
             <!-- Journalist controls -->
             {% if user.role == 'journalist' and article.author == user %}
@@ -67,9 +77,23 @@
 
     {% for newsletter in newsletters %}
         <div style="border:1px solid gray; margin:10px; padding:10px;">
-            <h3>{{ newsletter.title }}</h3>
+           <h3>{{ newsletter.title }}</h3>
             <p>{{ newsletter.content }}</p>
             <p>Author: {{ newsletter.author.username }}</p>
+
+            {% if user.is_authenticated and user.role == "reader" %}
+
+                {% if user in newsletter.subscribers.all %}
+                    <a href="{% url 'unsubscribe_from_newsletter' newsletter.id %}">
+                        <button>Unsubscribe</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'subscribe_to_newsletter' newsletter.id %}">
+                        <button>Subscribe to {{ newsletter.title }}</button>
+                    </a>
+                {% endif %}
+
+            {% endif %}
 
             {% if user.role == 'journalist' and newsletter.author == user %}
                 <a href="{% url 'newsletter_update' newsletter.pk %}">Edit</a>

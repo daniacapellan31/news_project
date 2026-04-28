@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework.decorators import (
     api_view,
     authentication_classes,
@@ -102,3 +103,28 @@ def article_detail_api(request, pk):
             {"message": "Article deleted successfully."},
             status=status.HTTP_204_NO_CONTENT,
         )
+    
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def approve_article_api(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+
+    # Check role
+    if request.user.role != "editor":
+        return Response(
+            {"error": "Only editors can approve articles."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+    # Approve article
+    article.is_published = True
+    article.approved_by = request.user
+    article.editor = None
+    article.approved_at = timezone.now()
+    article.save()
+
+    return Response(
+        {"message": "Article approved successfully."},
+        status=status.HTTP_200_OK,
+    )

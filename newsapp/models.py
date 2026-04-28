@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
@@ -60,17 +61,28 @@ class Editorial(models.Model):
 class Newsletter(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="newsletters",
         limit_choices_to={"role": "journalist"},
     )
+
     articles = models.ManyToManyField(
         "Article",
         blank=True,
         related_name="newsletters",
     )
+
+    # NEW FIELD
+    subscribers = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name="subscribed_newsletters",
+        limit_choices_to={"role": "reader"},
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -80,26 +92,63 @@ class Newsletter(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+
+    # Journalist author for independent articles
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name="articles",
         limit_choices_to={"role": "journalist"},
     )
+
+    # Editor author for editor-created content
     editor = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="reviewed_articles",
+        related_name="editor_articles",
         limit_choices_to={"role": "editor"},
     )
+
     editorial = models.ForeignKey(
-        Editorial, on_delete=models.CASCADE, related_name="articles"
+        Editorial,
+        on_delete=models.CASCADE,
+        related_name="articles",
     )
+
     is_published = models.BooleanField(default=False)
+
+    # Editor who approved the article
+    approved_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="approved_articles",
+        limit_choices_to={"role": "editor"},
+    )
+
     approved_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def clean(self):
+        # An article must belong to either a journalist or an editor, but not both.
+        if self.author and self.editor:
+            raise ValidationError(
+                "An article cannot have both a journalist author and an editor author."
+            )
+
+        if not self.author and not self.editor:
+            raise ValidationError(
+                "An article must have either a journalist author or an editor author."
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
