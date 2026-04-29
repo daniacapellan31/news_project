@@ -39,6 +39,12 @@ class ArticleForm(forms.ModelForm):
 
 
 class NewsletterForm(forms.ModelForm):
+    articles = forms.ModelMultipleChoiceField(
+        queryset=Article.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
     class Meta:
         model = Newsletter
         fields = ["title", "content", "articles"]

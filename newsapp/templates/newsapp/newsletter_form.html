@@ -4,11 +4,29 @@
     <title>Newsletter Form</title>
 </head>
 <body>
+
     <h1>Newsletter Form</h1>
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <p>
+            <label>Title:</label><br>
+            {{ form.title }}
+        </p>
+
+        <p>
+            <label>Content:</label><br>
+            {{ form.content }}
+        </p>
+
+        <p>
+            <label>Articles:</label><br>
+            {{ form.articles }}
+        </p>
+
         <button type="submit">Save</button>
     </form>
+
 </body>
 </html>

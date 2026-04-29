@@ -14,7 +14,8 @@ from .views import (
     subscribe_to_journalist,
     unsubscribe_from_journalist,
     subscribe_to_newsletter,
-    unsubscribe_from_newsletter
+    unsubscribe_from_newsletter,
+    editor_article_create,
 )
 from .api_views import (
     article_list_create_api,
@@ -26,6 +27,7 @@ from .api_views import (
 urlpatterns = [
     path("", home, name="home"),
     path("register/", register_view, name="register"),
+    path("article/editor/create/", editor_article_create, name="editor_article_create"),
    
    # articles
     path("articles/<int:pk>/", article_detail, name="article_detail"),

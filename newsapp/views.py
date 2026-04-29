@@ -89,10 +89,48 @@ def article_create(request):
 
 
 @login_required
+def editor_article_create(request):
+    if request.user.role != "editor":
+        messages.error(request, "Only editors can create editor articles.")
+        return redirect("home")
+
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+
+        # Set the editor before form validation
+        form.instance.editor = request.user
+        form.instance.author = None
+        form.instance.approved_by = request.user
+        form.instance.approved_at = timezone.now()
+        form.instance.is_published = True
+
+        if form.is_valid():
+            article = form.save(commit=False)
+
+            article.editor = request.user
+            article.author = None
+            article.approved_by = request.user
+            article.approved_at = timezone.now()
+            article.is_published = True
+
+            article.save()
+            messages.success(request, "Editor article created successfully.")
+            return redirect("home")
+    else:
+        form = ArticleForm()
+
+    return render(request, "newsapp/article_form.html", {"form": form})
+
+
+@login_required
 def article_update(request, pk):
     article = get_object_or_404(Article, pk=pk)
 
-    if request.user.role != "journalist" or article.author != request.user:
+    if request.user.role == "journalist" and article.author != request.user:
+        messages.error(request, "You do not have permission to edit this article.")
+        return redirect("home")
+
+    if request.user.role not in ["journalist", "editor"]:
         messages.error(request, "You do not have permission to edit this article.")
         return redirect("home")
 
@@ -100,9 +138,17 @@ def article_update(request, pk):
         form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
             updated_article = form.save(commit=False)
-            updated_article.is_published = False
-            updated_article.editor = None
-            updated_article.approved_at = None
+
+            if request.user.role == "editor":
+                updated_article.editor = request.user
+                updated_article.approved_by = request.user
+                updated_article.approved_at = timezone.now()
+                updated_article.is_published = True
+            else:
+                updated_article.is_published = False
+                updated_article.editor = None
+                updated_article.approved_at = None
+
             updated_article.save()
             messages.success(request, "Article updated successfully.")
             return redirect("home")
@@ -116,7 +162,11 @@ def article_update(request, pk):
 def article_delete(request, pk):
     article = get_object_or_404(Article, pk=pk)
 
-    if request.user.role != "journalist" or article.author != request.user:
+    if request.user.role == "journalist" and article.author != request.user:
+        messages.error(request, "You do not have permission to delete this article.")
+        return redirect("home")
+
+    if request.user.role not in ["journalist", "editor"]:
         messages.error(request, "You do not have permission to delete this article.")
         return redirect("home")
 
@@ -140,6 +190,8 @@ def newsletter_create(request):
             newsletter = form.save(commit=False)
             newsletter.author = request.user
             newsletter.save()
+            form.save_m2m()
+
             messages.success(request, "Newsletter created successfully.")
             return redirect("home")
     else:
@@ -205,16 +257,13 @@ def approve_article(request, pk):
             role="reader", subscribed_journalists=article.author
         ).distinct()
 
-        recipient_list = [user.email for user in subscribers if user.email]
-
-        if recipient_list:
-            send_mail(
-                subject=f"New article published: {article.title}",
-                message=f"{article.author.username} published a new article:\n\n{article.title}\n\n{article.content}",
-                from_email="your_email@gmail.com",
-                recipient_list=recipient_list,
-                fail_silently=True,
-            )
+        send_mail(
+            subject=f"New article published: {article.title}",
+            message=f"{article.author.username} published a new article:\n\n{article.title}\n\n{article.content}",
+            from_email="your_email@gmail.com",
+            recipient_list=["test@test.com"],  
+            fail_silently=False,
+        )
 
         # Optional POST request
         try:
