@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 import requests
 
-from .models import Article, Newsletter, User
+from .models import Article, Newsletter, User, Editorial
 from .forms import RegisterForm, ArticleForm, NewsletterForm, EditorialForm
 
 
@@ -28,8 +28,18 @@ def home(request):
         articles = Article.objects.filter(is_published=True)
         newsletters = Newsletter.objects.none()
 
+    journalists = User.objects.filter(role="journalist")
+    editorials = Editorial.objects.all()
+
     return render(
-        request, "newsapp/home.html", {"articles": articles, "newsletters": newsletters}
+        request,
+        "newsapp/home.html",
+        {
+            "articles": articles,
+            "newsletters": newsletters,
+            "journalists": journalists,
+            "editorials": editorials,
+        },
     )
 
 
@@ -354,5 +364,51 @@ def unsubscribe_from_newsletter(request, newsletter_id):
 
     newsletter.subscribers.remove(request.user)
     messages.success(request, f"You have unsubscribed from {newsletter.title}.")
+
+    return redirect("home")
+
+
+@login_required
+def subscribe_to_editorial(request, editorial_id):
+    editorial = get_object_or_404(Editorial, id=editorial_id)
+
+    if request.user.role != "reader":
+        messages.error(request, "Only readers can subscribe to editorials.")
+        return redirect("home")
+
+    request.user.subscribed_editorials.add(editorial)
+    messages.success(request, f"You are now subscribed to {editorial.name}.")
+
+    return redirect("home")
+
+
+@login_required
+def unsubscribe_from_editorial(request, editorial_id):
+    editorial = get_object_or_404(Editorial, id=editorial_id)
+
+    if request.user.role != "reader":
+        messages.error(request, "Only readers can unsubscribe from editorials.")
+        return redirect("home")
+
+    request.user.subscribed_editorials.remove(editorial)
+    messages.success(request, f"You have unsubscribed from {editorial.name}.")
+
+    return redirect("home")
+
+
+@login_required
+def join_editorial(request, editorial_id):
+    editorial = get_object_or_404(Editorial, id=editorial_id)
+
+    if request.user.role == "journalist":
+        editorial.journalists.add(request.user)
+        messages.success(request, f"You joined {editorial.name} as a journalist.")
+
+    elif request.user.role == "editor":
+        editorial.editors.add(request.user)
+        messages.success(request, f"You joined {editorial.name} as an editor.")
+
+    else:
+        messages.error(request, "Only journalists and editors can join editorials.")
 
     return redirect("home")

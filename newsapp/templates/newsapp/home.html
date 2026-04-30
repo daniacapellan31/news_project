@@ -7,22 +7,29 @@
 
     <h1>News Project</h1>
 
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+            <p style="padding:10px; background-color:#d4edda; color:#155724; border:1px solid #c3e6cb;">
+    {{ message }}
+    </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {% if user.is_authenticated %}
         <p>Welcome, {{ user.username }} ({{ user.role }})</p>
 
-        <!-- Logout -->
         <form method="post" action="{% url 'logout' %}" style="display:inline;">
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
 
-        <!-- Journalist options -->
         {% if user.role == 'journalist' %}
             <p><a href="{% url 'article_create' %}">Create Article</a></p>
             <p><a href="{% url 'newsletter_create' %}">Create Newsletter</a></p>
         {% endif %}
 
-        <!-- Editor options -->
         {% if user.role == 'editor' %}
             <p><a href="{% url 'editorial_create' %}">Create Editorial</a></p>
             <p><a href="{% url 'editor_article_create' %}">Create Editor Article</a></p>
@@ -32,6 +39,60 @@
         <a href="{% url 'login' %}">Login</a>
         <a href="{% url 'register' %}">Register</a>
     {% endif %}
+
+    <hr>
+
+    <h2>Editorials</h2>
+
+    {% for editorial in editorials %}
+        <div style="border:1px solid black; margin:10px; padding:10px;">
+            <h3>{{ editorial.name }}</h3>
+
+            {% if user.is_authenticated and user.role == 'reader' %}
+                {% if editorial in user.subscribed_editorials.all %}
+                    <a href="{% url 'unsubscribe_from_editorial' editorial.id %}">
+                        <button>Unsubscribe from Editorial</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'subscribe_to_editorial' editorial.id %}">
+                        <button>Subscribe to Editorial</button>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if user.is_authenticated and user.role == 'journalist' or user.role == 'editor' %}
+                <a href="{% url 'join_editorial' editorial.id %}">
+                    <button>Join Editorial</button>
+                </a>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No editorials available.</p>
+    {% endfor %}
+
+    <hr>
+
+    <h2>Journalists</h2>
+
+    {% for journalist in journalists %}
+        <div style="border:1px solid gray; margin:10px; padding:10px;">
+            <p>{{ journalist.username }}</p>
+
+            {% if user.is_authenticated and user.role == 'reader' %}
+                {% if journalist in user.subscribed_journalists.all %}
+                    <a href="{% url 'unsubscribe_from_journalist' journalist.id %}">
+                        <button>Unsubscribe from Journalist</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'subscribe_to_journalist' journalist.id %}">
+                        <button>Subscribe to Journalist</button>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No journalists available.</p>
+    {% endfor %}
 
     <hr>
 
@@ -47,7 +108,6 @@
 
             <p>{{ article.content }}</p>
 
-            <!-- AUTHOR / EDITOR -->
             <p>
                 {% if article.author %}
                     Author: {{ article.author.username }}
@@ -59,18 +119,16 @@
             </p>
 
             {% if article.is_published %}
-                <p style="color: green;">Published</p> 
+                <p>Published</p>
             {% else %}
-                <p style="color: red;">Not Published</p>
+                <p>Not Published</p>
             {% endif %}
 
-            <!-- Controls -->
             {% if user.role == 'journalist' and article.author == user or user.role == 'editor' %}
                 <a href="{% url 'article_update' article.pk %}">Edit</a>
                 <a href="{% url 'article_delete' article.pk %}">Delete</a>
             {% endif %}
 
-            <!-- Editor approval -->
             {% if user.role == 'editor' and not article.is_published %}
                 <form method="post" action="{% url 'approve_article' article.pk %}">
                     {% csrf_token %}
@@ -88,7 +146,7 @@
 
     {% for newsletter in newsletters %}
         <div style="border:1px solid gray; margin:10px; padding:10px;">
-           <h3>{{ newsletter.title }}</h3>
+            <h3>{{ newsletter.title }}</h3>
             <p>{{ newsletter.content }}</p>
             <p>Author: {{ newsletter.author.username }}</p>
 
@@ -104,7 +162,6 @@
 
                     <p>{{ article.content }}</p>
 
-                    <!-- AUTHOR / EDITOR -->
                     <p>
                         {% if article.author %}
                             Author: {{ article.author.username }}
@@ -119,9 +176,7 @@
                 <p>No articles in this newsletter.</p>
             {% endfor %}
 
-            <!-- Subscriptions -->
             {% if user.is_authenticated and user.role == "reader" %}
-
                 {% if user in newsletter.subscribers.all %}
                     <a href="{% url 'unsubscribe_from_newsletter' newsletter.id %}">
                         <button>Unsubscribe</button>
@@ -131,10 +186,8 @@
                         <button>Subscribe to {{ newsletter.title }}</button>
                     </a>
                 {% endif %}
-
             {% endif %}
 
-            <!-- Journalist controls -->
             {% if user.role == 'journalist' and newsletter.author == user %}
                 <a href="{% url 'newsletter_update' newsletter.pk %}">Edit</a>
                 <a href="{% url 'newsletter_delete' newsletter.pk %}">Delete</a>

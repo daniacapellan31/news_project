@@ -2,21 +2,21 @@
 
 ## 📌 Project Overview
 
-News Project is a full-stack Django web application that simulates a real-world news publishing platform with role-based access control and API integration.
+News Project is a full-stack Django web application that simulates a real-world news publishing platform with role-based access control, editorial workflows, and API integration.
 
-Users can create, manage, approve, and consume news content depending on their assigned role.
+The system allows users to create, manage, approve, and consume news content based on their assigned role while maintaining data integrity and structured publishing processes.
 
 ---
 
 ## 👥 User Roles
 
-The system is built around three core roles:
+The application is built around three core roles:
 
-- Reader – consumes content  
-- Journalist – creates content  
-- Editor – reviews and approves content  
+- Reader – consumes and subscribes to content  
+- Journalist – creates and manages content  
+- Editor – reviews, approves, and organizes content  
 
-Each role has strictly controlled permissions to ensure proper workflow and data integrity.
+Each role enforces strict permission rules to replicate a real editorial system.
 
 ---
 
@@ -26,7 +26,9 @@ Each role has strictly controlled permissions to ensure proper workflow and data
 - Register and log in  
 - View only published articles  
 - Subscribe to journalists  
-- View articles from subscribed journalists via API  
+- Subscribe to editorials (publishers)  
+- Subscribe to newsletters  
+- View personalized content via API  
 
 ---
 
@@ -34,15 +36,17 @@ Each role has strictly controlled permissions to ensure proper workflow and data
 - Create articles (initially unpublished)  
 - Edit and delete their own articles  
 - Create newsletters  
-- Manage their own content  
+- Join editorials (publishers)  
+- Manage authored content  
 
 ---
 
 ### 🛠️ Editor
 - Review submitted articles  
-- Approve articles via API  
-- Publish content to make it visible to readers  
-- Manage editorials (publications)  
+- Approve and publish articles  
+- Create and manage editorials  
+- Join editorials  
+- Publish content immediately  
 
 ---
 
@@ -50,21 +54,38 @@ Each role has strictly controlled permissions to ensure proper workflow and data
 
 1. Journalist creates an article  
 2. Article is saved as Not Published  
-3. Editor approves article via API  
+3. Editor reviews and approves the article  
 4. Article becomes Published  
-5. Readers can now view it  
+5. Readers can access the content  
 
-✔ This workflow demonstrates real-world editorial approval systems.
+✔ This replicates a real editorial approval pipeline.
 
 ---
 
-## 🗞️ Editorials
+## 🗞️ Editorial System (Key Improvement)
 
-Editorials act as publishers that group journalists and editors.
+Editorials act as publishers that organize content and users.
 
-- Articles belong to an editorial  
-- Editors manage approval within their editorial  
-- Journalists publish under a structured organization  
+- Journalists and editors can join editorials
+- Articles are linked to an editorial
+- Readers can subscribe to editorials
+- Editorials provide structured content grouping
+
+✔ This feature was implemented to meet project requirements and improve system integrity.
+
+---
+
+## 🔔 Subscription System (Key Improvement)
+
+Readers can now interact dynamically through the UI:
+
+- Subscribe / Unsubscribe to journalists  
+- Subscribe / Unsubscribe to editorials  
+- Subscribe / Unsubscribe to newsletters  
+
+✔ All interactions are available through the frontend (not only admin)
+
+✔ UI buttons dynamically update based on subscription state
 
 ---
 
@@ -72,8 +93,8 @@ Editorials act as publishers that group journalists and editors.
 
 - Created by journalists  
 - Can include multiple articles  
-- Readers can subscribe to newsletters  
-- Provides curated collections of content  
+- Readers can subscribe  
+- Provides curated content collections  
 
 ---
 
@@ -90,11 +111,11 @@ The project includes a fully functional REST API.
 
 ### 🔑 Generate Token
 
-bash python manage.py drf_create_token <username> 
+    python manage.py drf_create_token <username>
 
 or:
 
-bash POST /api/token/ 
+    POST /api/token/
 
 ---
 
@@ -115,6 +136,7 @@ bash POST /api/token/
 - Only editors can approve articles  
 - Only published articles are visible to readers  
 - Journalists can only edit their own content  
+- Readers can only subscribe (not modify content)  
 
 ---
 
@@ -122,21 +144,25 @@ bash POST /api/token/
 
 Run tests with:
 
-bash python3 manage.py test 
+    python manage.py test
 
-Manual testing was also performed to validate:
-- Role permissions  
+Manual testing was performed to validate:
+
+- Role-based permissions  
 - API functionality  
-- UI behavior  
+- Subscription system  
+- UI interaction (buttons and feedback messages)  
 
 ---
 
 ## 🧠 Code Quality
 
-This project follows professional coding standards:
+This project follows professional development standards:
 
-- Black → automatic formatting  
+- Black → code formatting  
 - Flake8 → PEP8 validation  
+- Modular Django structure  
+- Clear separation of concerns  
 
 ---
 
@@ -153,22 +179,31 @@ This project follows professional coding standards:
 ## ⚙️ Installation Guide
 
 ### 1. Clone repository
-bash git clone <your-repository-url> cd news_project 
+
+    git clone <your-repository-url>
+    cd news_project
 
 ### 2. Create virtual environment
-bash python3 -m venv venv source venv/bin/activate 
+
+    python3 -m venv venv
+    source venv/bin/activate
 
 ### 3. Install dependencies
-bash pip install -r requirements.txt 
+
+    pip install -r requirements.txt
 
 ### 4. Run migrations
-bash python manage.py makemigrations python manage.py migrate 
+
+    python manage.py makemigrations
+    python manage.py migrate
 
 ### 5. Run server
-bash python manage.py runserver 
 
-### 6. Open browser
-http://127.0.0.1:8000/
+    python manage.py runserver
+
+### 6. Open in browser
+
+    http://127.0.0.1:8000/
 
 ---
 
@@ -180,26 +215,24 @@ The project includes a Planning folder with:
 - API Sequence Diagram  
 - System Design Notes  
 
-These documents describe system architecture and behavior.
-
 ---
 
 ## 🎯 Key Achievements
 
 - Full role-based system  
-- Secure API with token authentication  
-- Editorial approval workflow  
-- Integration between UI and API  
-- Clean and maintainable code  
+- Editorial workflow implementation  
+- Dynamic subscription system (UI + backend)  
+- REST API with authentication  
+- Clean and scalable architecture  
 
 ---
 
 ## 📌 Final Notes
 
-This project demonstrates the implementation of a real-world publishing workflow, combining backend logic, API design, and frontend interaction in a structured and scalable way.
+This project demonstrates a complete real-world publishing system, combining backend logic, API design, and interactive frontend behavior.
 
 ---
 
 ## 👩‍💻 Author
 
-Dania Onyebuagu
+Dania Ony

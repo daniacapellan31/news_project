@@ -12,15 +12,7 @@ class User(AbstractUser):
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
-    # Reader subscriptions
-    subscribed_publishers = models.ManyToManyField(
-        "self",
-        symmetrical=False,
-        blank=True,
-        related_name="publisher_subscribers",
-        limit_choices_to={"role": "journalist"},
-    )
-
+    # Readers can subscribe to journalists.
     subscribed_journalists = models.ManyToManyField(
         "self",
         symmetrical=False,
@@ -29,13 +21,20 @@ class User(AbstractUser):
         limit_choices_to={"role": "journalist"},
     )
 
+    # Readers can subscribe to editorials/publishers.
+    subscribed_editorials = models.ManyToManyField(
+        "Editorial",
+        blank=True,
+        related_name="editorial_subscribers",
+    )
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        # If NOT a reader, delete subscriptions.
+        # If the user is not a reader, remove reader subscriptions.
         if self.role != "reader":
-            self.subscribed_publishers.clear()
             self.subscribed_journalists.clear()
+            self.subscribed_editorials.clear()
 
     def __str__(self):
         return f"{self.username} ({self.role})"
@@ -48,10 +47,14 @@ class Editorial(models.Model):
         User,
         related_name="journalist_editorials",
         limit_choices_to={"role": "journalist"},
+        blank=True,
     )
 
     editors = models.ManyToManyField(
-        User, related_name="editor_editorials", limit_choices_to={"role": "editor"}
+        User,
+        related_name="editor_editorials",
+        limit_choices_to={"role": "editor"},
+        blank=True,
     )
 
     def __str__(self):
@@ -75,7 +78,6 @@ class Newsletter(models.Model):
         related_name="newsletters",
     )
 
-    # NEW FIELD
     subscribers = models.ManyToManyField(
         User,
         blank=True,
@@ -93,7 +95,6 @@ class Article(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
 
-    # Journalist author for independent articles
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -103,7 +104,6 @@ class Article(models.Model):
         limit_choices_to={"role": "journalist"},
     )
 
-    # Editor author for editor-created content
     editor = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -121,7 +121,6 @@ class Article(models.Model):
 
     is_published = models.BooleanField(default=False)
 
-    # Editor who approved the article
     approved_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -135,7 +134,6 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
-        # An article must belong to either a journalist or an editor, but not both.
         if self.author and self.editor:
             raise ValidationError(
                 "An article cannot have both a journalist author and an editor author."
@@ -151,4 +149,4 @@ class Article(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+            return self.title

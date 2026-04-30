@@ -15,6 +15,9 @@ from .views import (
     unsubscribe_from_journalist,
     subscribe_to_newsletter,
     unsubscribe_from_newsletter,
+    subscribe_to_editorial,
+    unsubscribe_from_editorial,
+    join_editorial,
     editor_article_create,
 )
 from .api_views import (
@@ -62,6 +65,21 @@ urlpatterns = [
         "newsletters/<int:newsletter_id>/unsubscribe/",
         unsubscribe_from_newsletter,
         name="unsubscribe_from_newsletter",
+    ),
+    path(
+        "editorials/<int:editorial_id>/subscribe/",
+        subscribe_to_editorial,
+        name="subscribe_to_editorial",
+    ),
+    path(
+        "editorials/<int:editorial_id>/unsubscribe/",
+        unsubscribe_from_editorial,
+        name="unsubscribe_from_editorial",
+    ),
+    path(
+        "editorials/<int:editorial_id>/join/",
+        join_editorial,
+        name="join_editorial",
     ),
    
     # API endpoints

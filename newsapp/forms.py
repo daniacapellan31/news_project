@@ -10,7 +10,7 @@ class RegisterForm(UserCreationForm):
             "username",
             "email",
             "role",
-            "subscribed_publishers",
+            "subscribed_editorials",
             "subscribed_journalists",
             "password1",
             "password2",
@@ -20,15 +20,14 @@ class RegisterForm(UserCreationForm):
         super().__init__(*args, **kwargs)
 
         # Show only users who are journalists for subscriptions
-        self.fields["subscribed_publishers"].queryset = User.objects.filter(
-            role="journalist"
-        )
+        self.fields["subscribed_editorials"].queryset = Editorial.objects.all()
+        
         self.fields["subscribed_journalists"].queryset = User.objects.filter(
             role="journalist"
         )
 
         # Optional: Make them non-mandatory.
-        self.fields["subscribed_publishers"].required = False
+        self.fields["subscribed_editorials"].required = False
         self.fields["subscribed_journalists"].required = False
 
 
