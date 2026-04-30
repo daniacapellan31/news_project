@@ -19,9 +19,9 @@ class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Show only users who are journalists for subscriptions
+        # Show available editorials and journalists for reader subscriptions
         self.fields["subscribed_editorials"].queryset = Editorial.objects.all()
-        
+
         self.fields["subscribed_journalists"].queryset = User.objects.filter(
             role="journalist"
         )
@@ -52,4 +52,4 @@ class NewsletterForm(forms.ModelForm):
 class EditorialForm(forms.ModelForm):
     class Meta:
         model = Editorial
-        fields = ["name", "journalists", "editors",]
+        fields = ["name", "journalists", "editors"]
