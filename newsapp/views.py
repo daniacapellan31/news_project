@@ -11,6 +11,14 @@ from .forms import RegisterForm, ArticleForm, NewsletterForm, EditorialForm
 
 
 def home(request):
+    """
+    Displays the home page and loads content based on the user's role.
+
+    Readers can view published articles and newsletters.
+    Journalists can view only their own articles and newsletters.
+    Editors can view all articles and newsletters.
+    Anonymous users can only view published articles.
+    """
     if request.user.is_authenticated:
         if request.user.role == "reader":
             articles = Article.objects.filter(is_published=True)
@@ -249,7 +257,15 @@ def newsletter_delete(request, pk):
 
 
 @login_required
+@login_required
 def approve_article(request, pk):
+    """
+    Allows an editor to approve and publish an article.
+
+    When an article is approved, the function updates the publication status,
+    records the editor and approval date, sends an email notification,
+    and makes an optional POST request to simulate an external API action.
+    """
     article = get_object_or_404(Article, pk=pk)
 
     if request.user.role != "editor":
