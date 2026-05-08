@@ -254,11 +254,11 @@ python manage.py runserver
 
 ## Running the project with Docker
 
-### 1. Build image
-docker build -t news_project .
+### 1. Build and start containers
+docker compose up --build
 
-### 2. Run container
-docker run -p 8000:8000 news_project
+### 2. Run migrations (first time only)
+docker compose exec web python manage.py migrate
 
 ### Access the application
 http://localhost:8000/
