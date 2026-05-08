@@ -233,6 +233,42 @@ This project demonstrates a complete real-world publishing system, combining bac
 
 ---
 
+## Local Setup (venv)
+
+### 1. Create virtual environment
+python3 -m venv venv
+
+### 2. Activate it
+source venv/bin/activate
+
+### 3. Install dependencies
+pip install -r requirements.txt
+
+### 4. Run migrations
+python manage.py migrate
+
+### 5. Run server
+python manage.py runserver
+
+---
+
+## Running the project with Docker
+
+### 1. Build image
+docker build -t news_project .
+
+### 2. Run container
+docker run -p 8000:8000 news_project
+
+### Access the application
+http://localhost:8000/
+
+---
+
+## Notes
+
+- Do not include sensitive information such as passwords or API keys.
+
 ## 👩‍💻 Author
 
 Dania Ony
