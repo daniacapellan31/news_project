@@ -4,6 +4,13 @@ from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
+    """
+    Custom user model that extends Django's AbstractUser.
+
+    Adds a role field to distinguish between readers, journalists, and editors.
+    Readers can subscribe to journalists and editorials.
+    Non-reader users have their subscriptions cleared automatically on save.
+    """
     ROLE_CHOICES = (
         ("reader", "Reader"),
         ("journalist", "Journalist"),
@@ -29,6 +36,9 @@ class User(AbstractUser):
     )
 
     def save(self, *args, **kwargs):
+        """
+        Saves the user and clears subscriptions if the user is not a reader.
+        """
         super().save(*args, **kwargs)
 
         # If the user is not a reader, remove reader subscriptions.
@@ -37,10 +47,17 @@ class User(AbstractUser):
             self.subscribed_editorials.clear()
 
     def __str__(self):
+        """Returns the username and role of the user."""
         return f"{self.username} ({self.role})"
 
 
 class Editorial(models.Model):
+    """
+    Represents a news editorial or publisher.
+
+    An editorial can have multiple journalists and editors associated with it.
+    Readers can subscribe to editorials to follow their content.
+    """
     name = models.CharField(max_length=100)
 
     journalists = models.ManyToManyField(
@@ -58,10 +75,16 @@ class Editorial(models.Model):
     )
 
     def __str__(self):
+        """Returns the name of the editorial."""
         return self.name
 
 
 class Newsletter(models.Model):
+    """
+    Represents a newsletter created by a journalist.
+
+    A newsletter can include multiple articles and have multiple reader subscribers.
+    """
     title = models.CharField(max_length=200)
     content = models.TextField()
 
@@ -88,10 +111,18 @@ class Newsletter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """Returns the title of the newsletter."""
+
         return self.title
 
 
 class Article(models.Model):
+    """
+    Represents a news article.
+
+    An article can be written by a journalist or directly by an editor, but not both.
+    It must be approved by an editor before it is published.
+    """
     title = models.CharField(max_length=200)
     content = models.TextField()
 
@@ -134,6 +165,12 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
+        """
+        Validates that the article has either a journalist author or an editor, but not both.
+
+        Raises:
+            ValidationError: If both or neither author and editor are set.
+        """
         if self.author and self.editor:
             raise ValidationError(
                 "An article cannot have both a journalist author and an editor author."
@@ -145,8 +182,12 @@ class Article(models.Model):
             )
 
     def save(self, *args, **kwargs):
+        """
+        Runs full validation before saving the article.
+        """
         self.full_clean()
         super().save(*args, **kwargs)
 
     def __str__(self):
-            return self.title
+        """Returns the title of the article."""
+        return self.title

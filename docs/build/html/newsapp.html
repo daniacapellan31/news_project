@@ -14,6 +14,8 @@
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="newsapp.migrations package" href="newsapp.migrations.html" />
+    <link rel="prev" title="manage module" href="manage.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -219,22 +221,46 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.api_views.approve_article_api">
 <span class="sig-prename descclassname"><span class="pre">newsapp.api_views.</span></span><span class="sig-name descname"><span class="pre">approve_article_api</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.api_views.approve_article_api" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>API endpoint to approve and publish an article.</p>
+<p>Only editors can approve articles.
+Sets the article as published and records the approving editor.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the article to approve.</p>
+</dd>
+</dl>
+<p>Requires token authentication.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.api_views.article_detail_api">
 <span class="sig-prename descclassname"><span class="pre">newsapp.api_views.</span></span><span class="sig-name descname"><span class="pre">article_detail_api</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.api_views.article_detail_api" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>API endpoint to retrieve, update, or delete a specific article.</p>
+<p>GET: Returns article details. Readers can only view published articles.
+PUT: Allows journalists (own articles only) or editors to update an article.
+DELETE: Allows journalists (own articles only) or editors to delete an article.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the article.</p>
+</dd>
+</dl>
+<p>Requires token authentication.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.api_views.article_list_create_api">
 <span class="sig-prename descclassname"><span class="pre">newsapp.api_views.</span></span><span class="sig-name descname"><span class="pre">article_list_create_api</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.api_views.article_list_create_api" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>API endpoint to list published articles or create a new one.</p>
+<p>GET: Returns a list of all published articles.
+POST: Allows a journalist to create a new unpublished article.</p>
+<p>Requires token authentication.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.api_views.subscribed_articles_api">
 <span class="sig-prename descclassname"><span class="pre">newsapp.api_views.</span></span><span class="sig-name descname"><span class="pre">subscribed_articles_api</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.api_views.subscribed_articles_api" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>API endpoint to retrieve published articles from subscribed journalists.</p>
+<p>Returns only articles from journalists the authenticated reader follows.
+Requires token authentication.</p>
+</dd></dl>
 
 </section>
 <section id="module-newsapp.apps">
@@ -268,6 +294,8 @@
 <dt class="sig sig-object py" id="newsapp.forms.ArticleForm">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.forms.</span></span><span class="sig-name descname"><span class="pre">ArticleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.forms.ArticleForm" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for creating and updating an article.</p>
+<p>Includes fields for title, content, and editorial.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.forms.ArticleForm.Meta">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#newsapp.forms.ArticleForm.Meta" title="Link to this definition">¶</a></dt>
@@ -307,6 +335,8 @@
 <dt class="sig sig-object py" id="newsapp.forms.EditorialForm">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.forms.</span></span><span class="sig-name descname"><span class="pre">EditorialForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.forms.EditorialForm" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for creating and updating an editorial.</p>
+<p>Includes fields for name, associated journalists, and editors.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.forms.EditorialForm.Meta">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#newsapp.forms.EditorialForm.Meta" title="Link to this definition">¶</a></dt>
@@ -346,6 +376,9 @@
 <dt class="sig sig-object py" id="newsapp.forms.NewsletterForm">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.forms.</span></span><span class="sig-name descname"><span class="pre">NewsletterForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.forms.NewsletterForm" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for creating and updating a newsletter.</p>
+<p>Allows the journalist to select multiple articles to include
+in the newsletter using checkboxes.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.forms.NewsletterForm.Meta">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#newsapp.forms.NewsletterForm.Meta" title="Link to this definition">¶</a></dt>
@@ -385,6 +418,9 @@
 <dt class="sig sig-object py" id="newsapp.forms.RegisterForm">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.forms.</span></span><span class="sig-name descname"><span class="pre">RegisterForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.forms.RegisterForm" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserCreationForm</span></code></p>
+<p>Form for registering a new user.</p>
+<p>Extends Django’s UserCreationForm to include role selection
+and optional subscriptions to editorials and journalists.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.forms.RegisterForm.Meta">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#newsapp.forms.RegisterForm.Meta" title="Link to this definition">¶</a></dt>
@@ -425,8 +461,11 @@
 <span id="newsapp-models-module"></span><h2>newsapp.models module<a class="headerlink" href="#module-newsapp.models" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.models.Article">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">Article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editorial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_published</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approved_by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approved_at</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Article" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">Article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Article" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Represents a news article.</p>
+<p>An article can be written by a journalist or directly by an editor, but not both.
+It must be approved by an editor before it is published.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="newsapp.models.Article.DoesNotExist">
 <span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#newsapp.models.Article.DoesNotExist" title="Link to this definition">¶</a></dt>
@@ -491,11 +530,11 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="newsapp.models.Article.clean">
 <span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Article.clean" title="Link to this definition">¶</a></dt>
-<dd><p>Hook for doing any extra model-wide validation after clean() has been
-called on every field by self.clean_fields. Any ValidationError raised
-by this method will not be associated with a particular field; it will
-have a special-case association with the field defined by
-NON_FIELD_ERRORS.</p>
+<dd><p>Validates that the article has either a journalist author or an editor, but not both.</p>
+<dl class="simple">
+<dt>Raises:</dt><dd><p>ValidationError: If both or neither author and editor are set.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -596,11 +635,7 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dl class="py method">
 <dt class="sig sig-object py" id="newsapp.models.Article.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Article.save" title="Link to this definition">¶</a></dt>
-<dd><p>Save the current instance. Override this in a subclass if you want to
-control the saving process.</p>
-<p>The ‘force_insert’ and ‘force_update’ parameters can be used to insist
-that the “save” must be an SQL insert or update (or equivalent for
-non-SQL backends), respectively. Normally, they should not be set.</p>
+<dd><p>Runs full validation before saving the article.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -614,8 +649,11 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.models.Editorial">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">Editorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Editorial" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">Editorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Editorial" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Represents a news editorial or publisher.</p>
+<p>An editorial can have multiple journalists and editors associated with it.
+Readers can subscribe to editorials to follow their content.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="newsapp.models.Editorial.DoesNotExist">
 <span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#newsapp.models.Editorial.DoesNotExist" title="Link to this definition">¶</a></dt>
@@ -720,8 +758,10 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.models.Newsletter">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">Newsletter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Newsletter" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">Newsletter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.Newsletter" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Represents a newsletter created by a journalist.</p>
+<p>A newsletter can include multiple articles and have multiple reader subscribers.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="newsapp.models.Newsletter.DoesNotExist">
 <span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#newsapp.models.Newsletter.DoesNotExist" title="Link to this definition">¶</a></dt>
@@ -837,8 +877,12 @@ object the first time, the query is executed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="newsapp.models.User">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_login</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_superuser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_staff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_active</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_joined</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.User" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">newsapp.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.User" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractUser</span></code></p>
+<p>Custom user model that extends Django’s AbstractUser.</p>
+<p>Adds a role field to distinguish between readers, journalists, and editors.
+Readers can subscribe to journalists and editorials.
+Non-reader users have their subscriptions cleared automatically on save.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="newsapp.models.User.DoesNotExist">
 <span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#newsapp.models.User.DoesNotExist" title="Link to this definition">¶</a></dt>
@@ -1109,11 +1153,7 @@ object the first time, the query is executed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="newsapp.models.User.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.models.User.save" title="Link to this definition">¶</a></dt>
-<dd><p>Save the current instance. Override this in a subclass if you want to
-control the saving process.</p>
-<p>The ‘force_insert’ and ‘force_update’ parameters can be used to insist
-that the “save” must be an SQL insert or update (or equivalent for
-non-SQL backends), respectively. Normally, they should not be set.</p>
+<dd><p>Saves the user and clears subscriptions if the user is not a reader.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1377,32 +1417,59 @@ and makes an optional POST request to simulate an external API action.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.article_create">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">article_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.article_create" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist to create a new article.</p>
+<p>Only users with the ‘journalist’ role can access this view.
+The article is saved as unpublished until approved by an editor.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.article_delete">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">article_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.article_delete" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist or editor to delete an article.</p>
+<p>Journalists can only delete their own articles.
+Editors can delete any article.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the article to delete.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.article_detail">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">article_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.article_detail" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Displays the full detail of a single article.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the article to display.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.article_update">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">article_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.article_update" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist or editor to update an existing article.</p>
+<p>Journalists can only edit their own articles.
+Editors can edit any article and will automatically approve it upon saving.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the article to update.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.editor_article_create">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">editor_article_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.editor_article_create" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows an editor to create and immediately publish an article.</p>
+<p>Only users with the ‘editor’ role can access this view.
+The article is automatically approved and published upon creation.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.editorial_create">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">editorial_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.editorial_create" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows an editor to create a new editorial.</p>
+<p>Only users with the ‘editor’ role can access this view.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.home">
@@ -1417,57 +1484,109 @@ Anonymous users can only view published articles.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.join_editorial">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">join_editorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editorial_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.join_editorial" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist or editor to join an editorial.</p>
+<p>Journalists are added as editorial journalists.
+Editors are added as editorial editors.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>editorial_id: ID of the editorial to join.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.newsletter_create">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.newsletter_create" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist to create a new newsletter.</p>
+<p>Only users with the ‘journalist’ role can access this view.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.newsletter_delete">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.newsletter_delete" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist to delete their own newsletter.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the newsletter to delete.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.newsletter_update">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.newsletter_update" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a journalist to update their own newsletter.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk: Primary key of the newsletter to update.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.register_view">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">register_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.register_view" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Handles user registration.</p>
+<p>Displays a registration form and creates a new user account.
+Logs the user in automatically upon successful registration.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.subscribe_to_editorial">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">subscribe_to_editorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editorial_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.subscribe_to_editorial" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a reader to subscribe to an editorial.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>editorial_id: ID of the editorial to subscribe to.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.subscribe_to_journalist">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">subscribe_to_journalist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">journalist_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.subscribe_to_journalist" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a reader to subscribe to a journalist.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>journalist_id: ID of the journalist to subscribe to.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.subscribe_to_newsletter">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">subscribe_to_newsletter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsletter_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.subscribe_to_newsletter" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a reader to subscribe to a newsletter.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>newsletter_id: ID of the newsletter to subscribe to.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.unsubscribe_from_editorial">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">unsubscribe_from_editorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editorial_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.unsubscribe_from_editorial" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a reader to unsubscribe from an editorial.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>editorial_id: ID of the editorial to unsubscribe from.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.unsubscribe_from_journalist">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">unsubscribe_from_journalist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">journalist_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.unsubscribe_from_journalist" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a reader to unsubscribe from a journalist.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>journalist_id: ID of the journalist to unsubscribe from.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="newsapp.views.unsubscribe_from_newsletter">
 <span class="sig-prename descclassname"><span class="pre">newsapp.views.</span></span><span class="sig-name descname"><span class="pre">unsubscribe_from_newsletter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsletter_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#newsapp.views.unsubscribe_from_newsletter" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Allows a reader to unsubscribe from a newsletter.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>newsletter_id: ID of the newsletter to unsubscribe from.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-newsapp">
@@ -1501,11 +1620,24 @@ Anonymous users can only view published articles.</p>
     </div>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">news_project</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config.html">config package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">newsapp package</a></li>
+</ul>
+</li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">news_project</a><ul>
+      <li>Previous: <a href="manage.html" title="previous chapter">manage module</a></li>
+      <li>Next: <a href="newsapp.migrations.html" title="next chapter">newsapp.migrations package</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>

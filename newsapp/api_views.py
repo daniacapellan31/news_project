@@ -18,6 +18,14 @@ from .serializers import ArticleSerializer
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def article_list_create_api(request):
+    """
+    API endpoint to list published articles or create a new one.
+
+    GET: Returns a list of all published articles.
+    POST: Allows a journalist to create a new unpublished article.
+
+    Requires token authentication.
+    """
     if request.method == "GET":
         articles = Article.objects.filter(is_published=True)
         serializer = ArticleSerializer(articles, many=True)
@@ -42,6 +50,12 @@ def article_list_create_api(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def subscribed_articles_api(request):
+    """
+    API endpoint to retrieve published articles from subscribed journalists.
+
+    Returns only articles from journalists the authenticated reader follows.
+    Requires token authentication.
+    """
     subscribed_journalists = request.user.subscribed_journalists.all()
     articles = Article.objects.filter(
         is_published=True, author__in=subscribed_journalists
@@ -54,6 +68,18 @@ def subscribed_articles_api(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def article_detail_api(request, pk):
+    """
+    API endpoint to retrieve, update, or delete a specific article.
+
+    GET: Returns article details. Readers can only view published articles.
+    PUT: Allows journalists (own articles only) or editors to update an article.
+    DELETE: Allows journalists (own articles only) or editors to delete an article.
+
+    Args:
+        pk: Primary key of the article.
+
+    Requires token authentication.
+    """
     article = get_object_or_404(Article, pk=pk)
 
     if request.method == "GET":
@@ -108,6 +134,17 @@ def article_detail_api(request, pk):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def approve_article_api(request, pk):
+    """
+    API endpoint to approve and publish an article.
+
+    Only editors can approve articles.
+    Sets the article as published and records the approving editor.
+
+    Args:
+        pk: Primary key of the article to approve.
+
+    Requires token authentication.
+    """
     article = get_object_or_404(Article, pk=pk)
 
     # Check role

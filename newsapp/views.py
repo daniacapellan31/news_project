@@ -52,6 +52,12 @@ def home(request):
 
 
 def register_view(request):
+    """
+    Handles user registration.
+
+    Displays a registration form and creates a new user account.
+    Logs the user in automatically upon successful registration.
+    """
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -65,6 +71,12 @@ def register_view(request):
 
 
 def article_detail(request, pk):
+    """
+    Displays the full detail of a single article.
+
+    Args:
+        pk: Primary key of the article to display.
+    """
     article = get_object_or_404(Article, pk=pk)
 
     return render(
@@ -76,6 +88,12 @@ def article_detail(request, pk):
 
 @login_required
 def article_create(request):
+    """
+    Allows a journalist to create a new article.
+
+    Only users with the 'journalist' role can access this view.
+    The article is saved as unpublished until approved by an editor.
+    """
     if request.user.role != "journalist":
         messages.error(request, "Only journalists can create articles.")
         return redirect("home")
@@ -108,6 +126,12 @@ def article_create(request):
 
 @login_required
 def editor_article_create(request):
+    """
+    Allows an editor to create and immediately publish an article.
+
+    Only users with the 'editor' role can access this view.
+    The article is automatically approved and published upon creation.
+    """
     if request.user.role != "editor":
         messages.error(request, "Only editors can create editor articles.")
         return redirect("home")
@@ -142,6 +166,15 @@ def editor_article_create(request):
 
 @login_required
 def article_update(request, pk):
+    """
+    Allows a journalist or editor to update an existing article.
+
+    Journalists can only edit their own articles.
+    Editors can edit any article and will automatically approve it upon saving.
+
+    Args:
+        pk: Primary key of the article to update.
+    """
     article = get_object_or_404(Article, pk=pk)
 
     if request.user.role == "journalist" and article.author != request.user:
@@ -178,6 +211,15 @@ def article_update(request, pk):
 
 @login_required
 def article_delete(request, pk):
+    """
+    Allows a journalist or editor to delete an article.
+
+    Journalists can only delete their own articles.
+    Editors can delete any article.
+
+    Args:
+        pk: Primary key of the article to delete.
+    """
     article = get_object_or_404(Article, pk=pk)
 
     if request.user.role == "journalist" and article.author != request.user:
@@ -198,6 +240,11 @@ def article_delete(request, pk):
 
 @login_required
 def newsletter_create(request):
+    """
+    Allows a journalist to create a new newsletter.
+
+    Only users with the 'journalist' role can access this view.
+    """
     if request.user.role != "journalist":
         messages.error(request, "Only journalists can create newsletters.")
         return redirect("home")
@@ -220,6 +267,12 @@ def newsletter_create(request):
 
 @login_required
 def newsletter_update(request, pk):
+    """
+    Allows a journalist to update their own newsletter.
+
+    Args:
+        pk: Primary key of the newsletter to update.
+    """
     newsletter = get_object_or_404(Newsletter, pk=pk)
 
     if request.user.role != "journalist" or newsletter.author != request.user:
@@ -240,6 +293,12 @@ def newsletter_update(request, pk):
 
 @login_required
 def newsletter_delete(request, pk):
+    """
+    Allows a journalist to delete their own newsletter.
+
+    Args:
+        pk: Primary key of the newsletter to delete.
+    """
     newsletter = get_object_or_404(Newsletter, pk=pk)
 
     if request.user.role != "journalist" or newsletter.author != request.user:
@@ -313,6 +372,11 @@ def approve_article(request, pk):
 
 @login_required
 def editorial_create(request):
+    """
+    Allows an editor to create a new editorial.
+
+    Only users with the 'editor' role can access this view.
+    """
     if request.user.role != "editor":
         messages.error(request, "Only editors can create editorials.")
         return redirect("home")
@@ -331,6 +395,12 @@ def editorial_create(request):
 
 @login_required
 def subscribe_to_journalist(request, journalist_id):
+    """
+    Allows a reader to subscribe to a journalist.
+
+    Args:
+        journalist_id: ID of the journalist to subscribe to.
+    """
     journalist = get_object_or_404(User, id=journalist_id, role="journalist")
 
     if request.user.role != "reader":
@@ -345,6 +415,12 @@ def subscribe_to_journalist(request, journalist_id):
 
 @login_required
 def unsubscribe_from_journalist(request, journalist_id):
+    """
+    Allows a reader to unsubscribe from a journalist.
+
+    Args:
+        journalist_id: ID of the journalist to unsubscribe from.
+    """    
     journalist = get_object_or_404(User, id=journalist_id, role="journalist")
 
     if request.user.role != "reader":
@@ -358,6 +434,12 @@ def unsubscribe_from_journalist(request, journalist_id):
 
 @login_required
 def subscribe_to_newsletter(request, newsletter_id):
+    """
+    Allows a reader to subscribe to a newsletter.
+
+    Args:
+        newsletter_id: ID of the newsletter to subscribe to.
+    """
     newsletter = get_object_or_404(Newsletter, id=newsletter_id)
 
     if request.user.role != "reader":
@@ -372,6 +454,12 @@ def subscribe_to_newsletter(request, newsletter_id):
 
 @login_required
 def unsubscribe_from_newsletter(request, newsletter_id):
+    """
+    Allows a reader to unsubscribe from a newsletter.
+
+    Args:
+        newsletter_id: ID of the newsletter to unsubscribe from.
+    """
     newsletter = get_object_or_404(Newsletter, id=newsletter_id)
 
     if request.user.role != "reader":
@@ -386,6 +474,12 @@ def unsubscribe_from_newsletter(request, newsletter_id):
 
 @login_required
 def subscribe_to_editorial(request, editorial_id):
+    """
+    Allows a reader to subscribe to an editorial.
+
+    Args:
+        editorial_id: ID of the editorial to subscribe to.
+    """
     editorial = get_object_or_404(Editorial, id=editorial_id)
 
     if request.user.role != "reader":
@@ -400,6 +494,12 @@ def subscribe_to_editorial(request, editorial_id):
 
 @login_required
 def unsubscribe_from_editorial(request, editorial_id):
+    """
+    Allows a reader to unsubscribe from an editorial.
+
+    Args:
+        editorial_id: ID of the editorial to unsubscribe from.
+    """
     editorial = get_object_or_404(Editorial, id=editorial_id)
 
     if request.user.role != "reader":
@@ -414,6 +514,15 @@ def unsubscribe_from_editorial(request, editorial_id):
 
 @login_required
 def join_editorial(request, editorial_id):
+    """
+    Allows a journalist or editor to join an editorial.
+
+    Journalists are added as editorial journalists.
+    Editors are added as editorial editors.
+
+    Args:
+        editorial_id: ID of the editorial to join.
+    """
     editorial = get_object_or_404(Editorial, id=editorial_id)
 
     if request.user.role == "journalist":
