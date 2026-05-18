@@ -2,273 +2,371 @@
 
 ## 📌 Project Overview
 
-News Project is a full-stack Django web application that simulates a real-world news publishing platform with role-based access control, editorial workflows, and API integration.
+News Project is a full-stack Django web application that simulates a real-world digital publishing platform with role-based access control, editorial workflows, subscription systems, and REST API integration.
 
-The system allows users to create, manage, approve, and consume news content based on their assigned role while maintaining data integrity and structured publishing processes.
+The system allows users to create, manage, review, approve, publish, and consume news content based on their assigned role while maintaining structured publishing processes and data integrity.
 
----
-
-## 👥 User Roles
-
-The application is built around three core roles:
-
-- Reader – consumes and subscribes to content  
-- Journalist – creates and manages content  
-- Editor – reviews, approves, and organizes content  
-
-Each role enforces strict permission rules to replicate a real editorial system.
+This project was designed to replicate professional newsroom workflows commonly used in modern publishing platforms.
 
 ---
 
-## ✨ Core Features
+# ✨ Core Features
 
-### 👤 Reader
-- Register and log in  
-- View only published articles  
-- Subscribe to journalists  
-- Subscribe to editorials (publishers)  
-- Subscribe to newsletters  
-- View personalized content via API  
-
----
-
-### ✍️ Journalist
-- Create articles (initially unpublished)  
-- Edit and delete their own articles  
-- Create newsletters  
-- Join editorials (publishers)  
-- Manage authored content  
+## 👤 Reader
+- Register and log in
+- View published articles only
+- Subscribe and unsubscribe to journalists
+- Subscribe and unsubscribe to editorials
+- Subscribe and unsubscribe to newsletters
+- Access personalized content through the API
 
 ---
 
-### 🛠️ Editor
-- Review submitted articles  
-- Approve and publish articles  
-- Create and manage editorials  
-- Join editorials  
-- Publish content immediately  
+## ✍️ Journalist
+- Create articles
+- Edit and delete authored articles
+- Create newsletters
+- Join editorials
+- Manage personal content
 
 ---
 
-## 📰 Articles Workflow
-
-1. Journalist creates an article  
-2. Article is saved as Not Published  
-3. Editor reviews and approves the article  
-4. Article becomes Published  
-5. Readers can access the content  
-
-✔ This replicates a real editorial approval pipeline.
+## 🛠️ Editor
+- Review submitted articles
+- Approve and publish articles
+- Create and manage editorials
+- Organize publishing workflows
+- Publish content immediately
 
 ---
 
-## 🗞️ Editorial System (Key Improvement)
+# 👥 User Roles
 
-Editorials act as publishers that organize content and users.
+The application is built around three main user roles:
 
+| Role | Responsibilities |
+|------|------------------|
+| Reader | Consumes and subscribes to content |
+| Journalist | Creates and manages content |
+| Editor | Reviews, approves, and organizes content |
+
+Each role enforces strict permissions to simulate a real editorial publishing environment.
+
+---
+
+# 📰 Editorial Workflow
+
+The application implements a structured article approval system:
+
+1. A journalist creates an article
+2. The article is saved as unpublished
+3. An editor reviews the article
+4. The editor approves and publishes it
+5. Readers gain access to the published content
+
+✔ This workflow replicates a real-world newsroom approval pipeline.
+
+---
+
+# 🗞️ Editorial System
+
+Editorials act as publishing organizations that structure users and content.
+
+### Features
 - Journalists and editors can join editorials
-- Articles are linked to an editorial
+- Articles are associated with editorials
 - Readers can subscribe to editorials
-- Editorials provide structured content grouping
+- Editorials organize content distribution
 
-✔ This feature was implemented to meet project requirements and improve system integrity.
-
----
-
-## 🔔 Subscription System (Key Improvement)
-
-Readers can now interact dynamically through the UI:
-
-- Subscribe / Unsubscribe to journalists  
-- Subscribe / Unsubscribe to editorials  
-- Subscribe / Unsubscribe to newsletters  
-
-✔ All interactions are available through the frontend (not only admin)
-
-✔ UI buttons dynamically update based on subscription state
+✔ This feature improves content structure and system integrity.
 
 ---
 
-## 📨 Newsletters
+# 🔔 Subscription System
 
-- Created by journalists  
-- Can include multiple articles  
-- Readers can subscribe  
-- Provides curated content collections  
+Readers can dynamically interact with content through the frontend interface.
 
----
+### Supported Subscriptions
+- Journalists
+- Editorials
+- Newsletters
 
-## 🔌 API (Django REST Framework)
+### Features
+- Subscribe / unsubscribe directly from the UI
+- Dynamic buttons update automatically
+- Personalized subscription experience
 
-The project includes a fully functional REST API.
-
-### 🔐 Authentication Methods
-- SessionAuthentication  
-- BasicAuthentication  
-- TokenAuthentication  
+✔ All subscription functionality is available through the frontend and backend.
 
 ---
 
-### 🔑 Generate Token
+# 📨 Newsletters
 
-    python manage.py drf_create_token <username>
+Newsletters provide curated collections of articles.
+
+### Features
+- Created by journalists
+- Can include multiple articles
+- Readers can subscribe
+- Supports organized content distribution
+
+---
+
+# 🔌 REST API (Django REST Framework)
+
+The project includes a fully functional REST API built with Django REST Framework.
+
+---
+
+## 🔐 Authentication Methods
+
+- SessionAuthentication
+- BasicAuthentication
+- TokenAuthentication
+
+---
+
+## 🔑 Generate Authentication Token
+
+```bash
+python manage.py drf_create_token <username>
+```
 
 or:
 
-    POST /api/token/
+```http
+POST /api/token/
+```
 
 ---
 
-### 📡 Example Endpoints
+## 📡 Example API Endpoints
 
 | Method | Endpoint | Description |
 |------|--------|-------------|
 | GET | /api/articles/ | List published articles |
 | POST | /api/articles/ | Create article (journalist only) |
-| GET | /api/articles/subscribed/ | Articles from subscriptions |
+| GET | /api/articles/subscribed/ | View subscribed content |
 | POST | /api/articles/<id>/approve/ | Approve article (editor only) |
 
 ---
 
-## 🔒 Permissions Logic
+# 🔒 Permissions Logic
 
-- Only journalists can create articles  
-- Only editors can approve articles  
-- Only published articles are visible to readers  
-- Journalists can only edit their own content  
-- Readers can only subscribe (not modify content)  
+The application enforces strict role-based permissions.
 
----
+### Rules
+- Only journalists can create articles
+- Only editors can approve articles
+- Readers can only view published content
+- Journalists can only modify their own content
+- Readers cannot modify platform content
 
-## 🧪 Testing
-
-Run tests with:
-
-    python manage.py test
-
-Manual testing was performed to validate:
-
-- Role-based permissions  
-- API functionality  
-- Subscription system  
-- UI interaction (buttons and feedback messages)  
+✔ This ensures proper separation of responsibilities.
 
 ---
 
-## 🧠 Code Quality
+# ⚙️ Installation and Setup
 
-This project follows professional development standards:
+## 1. Clone the repository
 
-- Black → code formatting  
-- Flake8 → PEP8 validation  
-- Modular Django structure  
-- Clear separation of concerns  
+```bash
+git clone <your-repository-url>
+```
 
----
-
-## 🛠️ Technologies Used
-
-- Python  
-- Django  
-- Django REST Framework  
-- MariaDB / MySQL  
-- HTML (Django Templates)  
+```bash
+cd news_project
+```
 
 ---
 
-## ⚙️ Installation Guide
+## 2. Create a virtual environment
 
-### 1. Clone repository
-
-    git clone <your-repository-url>
-    cd news_project
-
-### 2. Create virtual environment
-
-    python3 -m venv venv
-    source venv/bin/activate
-
-### 3. Install dependencies
-
-    pip install -r requirements.txt
-
-### 4. Run migrations
-
-    python manage.py makemigrations
-    python manage.py migrate
-
-### 5. Run server
-
-    python manage.py runserver
-
-### 6. Open in browser
-
-    http://127.0.0.1:8000/
-
----
-
-## 📊 Project Planning
-
-The project includes a Planning folder with:
-
-- Use Case Diagram  
-- API Sequence Diagram  
-- System Design Notes  
-
----
-
-## 🎯 Key Achievements
-
-- Full role-based system  
-- Editorial workflow implementation  
-- Dynamic subscription system (UI + backend)  
-- REST API with authentication  
-- Clean and scalable architecture  
-
----
-
-## 📌 Final Notes
-
-This project demonstrates a complete real-world publishing system, combining backend logic, API design, and interactive frontend behavior.
-
----
-
-## Local Setup (venv)
-
-### 1. Create virtual environment
+```bash
 python3 -m venv venv
+```
 
-### 2. Activate it
+---
+
+## 3. Activate the virtual environment
+
+### macOS / Linux
+
+```bash
 source venv/bin/activate
+```
 
-### 3. Install dependencies
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+---
+
+## 4. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-### 4. Run migrations
+---
+
+## 5. Configure environment variables
+
+Create a `.env` file in the root directory and include:
+
+```env
+SECRET_KEY=your_secret_key
+DEBUG=True
+
+DB_NAME=news_project_db
+DB_USER=root
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+✔ These variables are required for Django and Docker configuration.
+
+---
+
+## 6. Run migrations
+
+```bash
+python manage.py makemigrations
+```
+
+```bash
 python manage.py migrate
+```
 
-### 5. Run server
+---
+
+## 7. Start the development server
+
+```bash
 python manage.py runserver
+```
 
 ---
 
-## Running the project with Docker
+## 8. Open the application
 
-### 1. Build and start containers
+```text
+http://127.0.0.1:8000/
+```
+
+---
+
+# 🐳 Running the Project with Docker
+
+## Build and start containers
+
+```bash
 docker compose up --build
-
-### 2. Run migrations (first time only)
-docker compose exec web python manage.py migrate
-
-### Access the application
-http://localhost:8000/
+```
 
 ---
 
-## Notes
+## Run migrations inside Docker
 
-- Do not include sensitive information such as passwords or API keys.
+```bash
+docker compose exec web python manage.py migrate
+```
 
-## 👩‍💻 Author
+---
 
-Dania Ony
+## Access the application
+
+```text
+http://localhost:8000/
+```
+
+---
+
+# 🧪 Testing
+
+Run automated tests with:
+
+```bash
+python manage.py test
+```
+
+---
+
+## Manual Testing Included
+
+- Role-based permissions
+- REST API functionality
+- Editorial workflows
+- Subscription system
+- Frontend interactions
+- Authentication system
+
+---
+
+# 🧠 Code Quality
+
+This project follows professional software development practices.
+
+### Standards Used
+- Black → code formatting
+- Flake8 → PEP8 validation
+- Modular Django architecture
+- Separation of concerns
+- Reusable application structure
+
+---
+
+# 🛠️ Technologies Used
+
+- Python
+- Django
+- Django REST Framework
+- MariaDB / MySQL
+- HTML
+- Django Templates
+- Docker
+
+---
+
+# 📊 Project Planning
+
+The project includes a dedicated Planning folder containing:
+
+- Use Case Diagram
+- API Sequence Diagram
+- System Design Notes
+
+---
+
+# 🎯 Key Achievements
+
+✔ Full role-based authentication system
+
+✔ Editorial approval workflow
+
+✔ Dynamic subscription system
+
+✔ REST API with authentication
+
+✔ Frontend and backend integration
+
+✔ Clean and scalable architecture
+
+✔ Docker containerization support
+
+---
+
+# 📌 Final Notes
+
+This project demonstrates the development of a complete digital publishing platform that combines backend engineering, API development, role-based security, and interactive frontend behavior.
+
+The application was designed to simulate real-world publishing systems while following professional software development standards.
+
+---
+
+# 👩‍💻 Author
+
+Dania Onyebuagu
